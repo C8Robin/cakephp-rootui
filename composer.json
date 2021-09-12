@@ -1,5 +1,5 @@
 {
-    "name": "C8Robin/rootui",
+    "name": "c8Robin/cakephp-rootui",
     "description": "Plugin for using RootUI with a CakePHP application",
     "type": "cakephp-plugin",
     "license": "MIT",
