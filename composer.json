@@ -1,0 +1,24 @@
+{
+    "name": "C8Robin/rootui",
+    "description": "Plugin for using RootUI with a CakePHP application",
+    "type": "cakephp-plugin",
+    "license": "MIT",
+    "require": {
+        "php": ">=7.2",
+        "cakephp/cakephp": "~4.2.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8.5 || ^9.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "RootUi\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "RootUi\\Test\\": "tests/",
+            "Cake\\Test\\": "vendor/cakephp/cakephp/tests/"
+        }
+    }
+}

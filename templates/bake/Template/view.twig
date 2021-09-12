@@ -1,0 +1,127 @@
+{#
+/**
+ * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
+ * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
+ *
+ * Licensed under The MIT License
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @link          http://cakephp.org CakePHP(tm) Project
+ * @since         2.0.0
+ * @license       http://www.opensource.org/licenses/mit-license.php MIT License
+ */
+#}
+<?php
+/**
+ * @var \{{ namespace }}\View\AppView $this
+ * @var \{{ entityClass }} ${{ singularVar }}
+ */
+ $this->set('entity', '{{ singularVar }}');
+$this->set('entityId', ${{ singularVar }}->primaryKey[0]);
+$this->set('showActions', true);
+?>
+{% set done = [] %}
+{% set associations = {'BelongsTo': [], 'HasOne': [], 'HasMany': [], 'BelongsToMany': []}|merge(associations) %}
+{% set fieldsData = Bake.getViewFieldsData(fields, schema, associations) %}
+{% set associationFields = fieldsData.associationFields %}
+{% set groupedFields = fieldsData.groupedFields %}
+{% set pK = '$' ~ singularVar ~ '->' ~ primaryKey[0] %}
+<div class="row mb-50">
+    <div class="col-lg-6">
+        <div class="rui-widget rui-widget-actions">
+            <div class="rui-widget-head">
+                <h2 class="rui-widget-title"><?= ${{ singularVar }}->{{ displayField }} ?></h2>
+            </div>
+
+            <div class="rui-widget-content">
+{% if groupedFields['string'] %}
+{% for field in groupedFields['string'] %}
+{% if associationFields[field] is defined %}
+{% set details = associationFields[field] %}
+                <p><span data-feather="user" class="rui-icon rui-icon-stroke-1_5"></span>&nbsp;
+                    <?= ${{ singularVar }}->has('{{ details.property }}') ? $this->Html->link(${{ singularVar }}->{{ details.property }}->{{ details.displayField }}, ['controller' => '{{ details.controller }}', 'action' => 'view', ${{ singularVar }}->{{ details.property }}->{{ details.primaryKey[0] }}]) : '' ?>
+                </p>
+{% else %}
+                <p><span data-feather="user" class="rui-icon rui-icon-stroke-1_5"></span>&nbsp;
+                    <?= h(${{ singularVar }}->{{ field }}) ?>
+                </p>
+{% endif %}
+{% endfor %}
+{% endif %}
+{% if associations.HasOne %}
+{% for alias, details in associations.HasOne %}
+                <p><span data-feather="user" class="rui-icon rui-icon-stroke-1_5"></span>&nbsp;
+                    <?= ${{ singularVar }}->has('{{ details.property }}') ? $this->Html->link(${{ singularVar }}->{{ details.property }}->{{ details.displayField }}, ['controller' => '{{ details.controller }}', 'action' => 'view', ${{ singularVar }}->{{ details.property }}->{{ details.primaryKey[0] }}]) : '' ?>
+                </p>
+{% endfor %}
+{% endif %}
+{% if groupedFields.number %}
+{% for field in groupedFields.number %}
+                <p><span data-feather="user" class="rui-icon rui-icon-stroke-1_5"></span>&nbsp;
+                    <?= $this->Number->format(${{ singularVar }}->{{ field }}) ?>
+                </p>
+{% endfor %}
+{% endif %}
+{% if groupedFields.date %}
+{% for field in groupedFields.date %}
+                <p><span data-feather="user" class="rui-icon rui-icon-stroke-1_5"></span>&nbsp;
+                    <?= h(${{ singularVar }}->{{ field }}) ?>
+                </p>
+{% endfor %}
+{% endif %}
+{% if groupedFields.boolean %}
+{% for field in groupedFields.boolean %}
+                <p><span data-feather="user" class="rui-icon rui-icon-stroke-1_5"></span>&nbsp;
+                    <?= ${{ singularVar }}->{{ field }} ? __('Yes') : __('No'); ?>
+                </p>
+{% endfor %}
+{% endif %}
+
+{% if groupedFields.text %}
+{% for field in groupedFields.text %}
+                <div class="text">
+                    <strong><?= __('{{ field|humanize }}') ?></strong>
+                    <blockquote>
+                        <?= $this->Text->autoParagraph(h(${{ singularVar }}->{{ field }})); ?>
+                    </blockquote>
+                </div>
+{% endfor %}
+{% endif %}
+            </div>
+{% set relations = associations.BelongsToMany|merge(associations.HasMany) %}
+{% for alias, details in relations %}
+{% set otherSingularVar = alias|variable %}
+{% set otherPluralHumanName = details.controller|underscore|humanize %}
+            <div class="related">
+                <h3><?= __('Related {{ otherPluralHumanName }}') ?> : <?= (!empty(${{ singularVar }})) ? count(${{ singularVar }}) : '0' ?></h3>
+
+                <?php if (!empty(${{ singularVar }}->{{ details.property }})) : ?>
+
+                <div class="row">
+
+                    <?php foreach (${{ singularVar }}->{{ details.property }} as ${{ otherSingularVar }}) : ?>
+
+                    <div class="col">
+                        <div class="card stork-gallery-card mb-10">
+                            <div class="card-body">
+                                {% for field in details.fields %}
+                                    <p><?= __('{{ field|humanize }}') ?>: <strong>${{ otherSingularVar }}->{{ field }}</strong></p>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <?php endforeach; ?>
+
+                </div>
+
+                <?php endif; ?>
+
+            </div>
+{% endfor %}
+        </div>
+    </div>
+</div>
+

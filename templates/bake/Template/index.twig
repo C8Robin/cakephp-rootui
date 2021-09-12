@@ -1,0 +1,73 @@
+{#
+/**
+ * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
+ * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
+ *
+ * Licensed under The MIT License
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @link          http://cakephp.org CakePHP(tm) Project
+ * @since         2.0.0
+ * @license       http://www.opensource.org/licenses/mit-license.php MIT License
+ */
+#}
+<?php
+/**
+ * @var \{{ namespace }}\View\AppView $this
+ * @var \{{ entityClass }}[]|\Cake\Collection\CollectionInterface ${{ pluralVar }}
+ */
+
+$this->set('showTableActions', true);
+$this->set('entity', '{{ singularHumanName }}');
+
+$filters = $this->cell('Filter');
+?>
+<h2><?= __('{{ pluralHumanName }}') ?> <span class="small text-secondary">(<?= count(${{ pluralVar }}) ?>)</span></h2>
+
+<?= $filters->render() ?>
+
+{% set fields = Bake.filterFields(fields, schema, modelObject, indexColumns, ['binary', 'text']) %}
+{% set done = [] %}
+<table class="rui-datatable table table-hover" id="entities">
+    <thead class="thead-light">
+    <tr>
+        {% for field in fields %}
+            <th>{{ field }}<span data-feather="chevron-up" class="rui-icon rui-icon-stroke-1_5"></span></th>
+        {% endfor %}
+    </tr>
+    </thead>
+    <tbody>
+    <?php foreach (${{ pluralVar }} as ${{ singularVar }}): ?>
+
+    {% set pk = '$' ~ singularVar ~ '->' ~ primaryKey[0] %}
+
+    <?php $url = $this->Url->build(['action' => 'view', {{ pk|raw }}]) ?>
+
+    <tr>
+        {% for field in fields %}
+            {% set isKey = false %}
+            {% if associations.BelongsTo is defined %}
+                {% for alias, details in associations.BelongsTo %}
+                    {% if field == details.foreignKey %}
+                        {% set isKey = true %}
+                        <td data-href="<?= $url ?>"><?= ${{ singularVar }}->has('{{ details.property }}') ? $this->Html->link(${{ singularVar }}->{{ details.property }}->{{ details.displayField }}, ['controller' => '{{ details.controller }}', 'action' => 'view', ${{ singularVar }}->{{ details.property }}->{{ details.primaryKey[0] }}]) : '' ?></td>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+            {% if isKey is not same as(true) %}
+                {% set columnData = Bake.columnData(field, schema) %}
+                {% if columnData.type not in ['integer', 'float', 'decimal', 'biginteger', 'smallinteger', 'tinyinteger'] %}
+                    <td data-href="<?= $url ?>"><?= h(${{ singularVar }}->{{ field }}) ?></td>
+                {% else %}
+                    <td data-href="<?= $url ?>" class="text-right"><?= $this->Number->format(${{ singularVar }}->{{ field }}) ?></td>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+    </tr>
+
+    <?php endforeach; ?>
+
+    </tbody>
+</table>
