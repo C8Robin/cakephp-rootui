@@ -13,7 +13,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <title>
-        PLUGIN - <?= $this->fetch('title') ?>
+        <?= $this->fetch('title') ?>
     </title>
 
     <!--    <link rel="apple-touch-icon" sizes="57x57" href="/favicon/apple-icon-57x57.png">-->
@@ -107,6 +107,8 @@
     <?= $this->Html->css('rootui.css'); ?>
     <?= $this->Html->css('rootui-night.css', ['media' => '(night)', 'class' => 'rui-nightmode-link']); ?>
 
+    <?= $this->Html->css('cakephp-rootui.css'); ?>
+
     <?= $this->fetch('meta') ?>
     <?= $this->fetch('css') ?>
     <?= $this->fetch('script') ?>
@@ -136,10 +138,10 @@
     Additional Classes:
         .rui-yaybar-dark
 -->
-<?= $this->element('RootUi.nav'); ?>
+<?= $this->element('navcontainer'); ?>
 <!-- END: Yaybar -->
 
-<?= $this->element('RootUi.topnav'); ?>
+<?= $this->element('topnav'); ?>
 
 <div class="rui-page content-wrap">
 
@@ -166,12 +168,12 @@
 
                 <?php if ($showTableActions): ?>
 
-                    <?= $this->element('RootUi.tableactions'); ?>
+                    <?= $this->element('tableactions'); ?>
 
                 <?php endif; ?>
                 <?php if ($showActions): ?>
 
-                    <?= $this->element('RootUi.actions'); ?>
+                    <?= $this->element('actions'); ?>
 
                 <?php endif; ?>
 
@@ -227,7 +229,7 @@
 <?php
 
 if (isset($entity)) {
-    echo $this->element('RootUi.deleteModal',
+    echo $this->element('deleteModal',
         [
             'entity' => $entity,
             //'onClick' => 'deleteEntities()' //this method is present in the javascript in tableactions.php!
