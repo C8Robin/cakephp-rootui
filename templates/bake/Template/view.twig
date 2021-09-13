@@ -19,7 +19,7 @@
  * @var \{{ entityClass }} ${{ singularVar }}
  */
  $this->set('entity', '{{ singularVar }}');
-$this->set('entityId', ${{ singularVar }}->primaryKey[0]);
+$this->set('entityId', ${{ singularVar }}->{{ primaryKey[0] }});
 $this->set('showActions', true);
 ?>
 {% set done = [] %}
@@ -40,7 +40,7 @@ $this->set('showActions', true);
 {% for field in groupedFields['string'] %}
 {% if associationFields[field] is defined %}
 {% set details = associationFields[field] %}
-                <p><span data-feather="user" class="rui-icon rui-icon-stroke-1_5"></span>&nbsp;
+                <p><span data-feather="square" class="rui-icon rui-icon-stroke-1_5"></span>&nbsp;
                     <?= ${{ singularVar }}->has('{{ details.property }}') ? $this->Html->link(${{ singularVar }}->{{ details.property }}->{{ details.displayField }}, ['controller' => '{{ details.controller }}', 'action' => 'view', ${{ singularVar }}->{{ details.property }}->{{ details.primaryKey[0] }}]) : '' ?>
                 </p>
 {% else %}

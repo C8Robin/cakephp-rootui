@@ -30,9 +30,9 @@
             <ul class="nav">
                 <li class="nav-item">
                     <!--
-                    <h1 style="margin-top: 0; margin-bottom: 0;"><?= $this->fetch('title') ?></h1>
+                    <h1 style="margin-top: 0; margin-bottom: 0;"></h1>
                     -->
-                    <h1 class="mt-0 mb-0">Stork</h1>
+                    <h1 class="mt-0 mb-0"><?= $this->fetch('title') ?></h1>
                 </li>
             </ul>
             <ul class="nav rui-navbar-right">
