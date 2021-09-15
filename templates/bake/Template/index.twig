@@ -34,37 +34,38 @@ $filters = $this->cell('Filter');
     <thead class="thead-light">
     <tr>
         {% for field in fields %}
-            <th>{{ field }}<span data-feather="chevron-up" class="rui-icon rui-icon-stroke-1_5"></span></th>
+            {#See https://github.com/cakephp/legacy-twig-view#}
+            <th>{{ field|humanize }}<span data-feather="chevron-up" class="rui-icon rui-icon-stroke-1_5"></span></th>
         {% endfor %}
     </tr>
     </thead>
     <tbody>
     <?php foreach (${{ pluralVar }} as ${{ singularVar }}): ?>
 
-    {% set pk = '$' ~ singularVar ~ '->' ~ primaryKey[0] %}
+{% set pk = '$' ~ singularVar ~ '->' ~ primaryKey[0] %}
 
     <?php $url = $this->Url->build(['action' => 'view', {{ pk|raw }}]) ?>
 
     <tr>
-        {% for field in fields %}
-            {% set isKey = false %}
-            {% if associations.BelongsTo is defined %}
-                {% for alias, details in associations.BelongsTo %}
-                    {% if field == details.foreignKey %}
-                        {% set isKey = true %}
-                        <td data-href="<?= $url ?>"><?= ${{ singularVar }}->has('{{ details.property }}') ? $this->Html->link(${{ singularVar }}->{{ details.property }}->{{ details.displayField }}, ['controller' => '{{ details.controller }}', 'action' => 'view', ${{ singularVar }}->{{ details.property }}->{{ details.primaryKey[0] }}]) : '' ?></td>
-                    {% endif %}
-                {% endfor %}
-            {% endif %}
-            {% if isKey is not same as(true) %}
-                {% set columnData = Bake.columnData(field, schema) %}
-                {% if columnData.type not in ['integer', 'float', 'decimal', 'biginteger', 'smallinteger', 'tinyinteger'] %}
-                    <td data-href="<?= $url ?>"><?= h(${{ singularVar }}->{{ field }}) ?></td>
-                {% else %}
-                    <td data-href="<?= $url ?>" class="text-right"><?= $this->Number->format(${{ singularVar }}->{{ field }}) ?></td>
-                {% endif %}
-            {% endif %}
-        {% endfor %}
+{% for field in fields %}
+{% set isKey = false %}
+{% if associations.BelongsTo is defined %}
+{% for alias, details in associations.BelongsTo %}
+{% if field == details.foreignKey %}
+{% set isKey = true %}
+        <td data-href="<?= $url ?>"><?= ${{ singularVar }}->has('{{ details.property }}') ? $this->Html->link(${{ singularVar }}->{{ details.property }}->{{ details.displayField }}, ['controller' => '{{ details.controller }}', 'action' => 'view', ${{ singularVar }}->{{ details.property }}->{{ details.primaryKey[0] }}]) : '' ?></td>
+{% endif %}
+{% endfor %}
+{% endif %}
+{% if isKey is not same as(true) %}
+{% set columnData = Bake.columnData(field, schema) %}
+{% if columnData.type not in ['integer', 'float', 'decimal', 'biginteger', 'smallinteger', 'tinyinteger'] %}
+        <td data-href="<?= $url ?>"><?= h(${{ singularVar }}->{{ field }}) ?></td>
+{% else %}
+        <td data-href="<?= $url ?>" class="text-right"><?= $this->Number->format(${{ singularVar }}->{{ field }}) ?></td>
+{% endif %}
+{% endif %}
+{% endfor %}
     </tr>
 
     <?php endforeach; ?>
