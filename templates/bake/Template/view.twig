@@ -95,7 +95,7 @@ $this->set('showActions', true);
 {% set otherSingularVar = alias|variable %}
 {% set otherPluralHumanName = details.controller|underscore|humanize %}
             <div class="related">
-                <h3><?= __('Related {{ otherPluralHumanName }}') ?> : <?= (!empty(${{ singularVar }})) ? count(${{ singularVar }}) : '0' ?></h3>
+                <h3><?= __('Related {{ otherPluralHumanName }}') ?> : <?= (!empty(${{ singularVar }}->{{ details.property }})) ? ${{ singularVar }}->{{ details.property }}->count() : '0' ?></h3>
 
                 <?php if (!empty(${{ singularVar }}->{{ details.property }})) : ?>
 
@@ -107,7 +107,7 @@ $this->set('showActions', true);
                         <div class="card stork-gallery-card mb-10">
                             <div class="card-body">
                                 {% for field in details.fields %}
-                                    <p><?= __('{{ field|humanize }}') ?>: <strong>${{ otherSingularVar }}->{{ field }}</strong></p>
+                                    <p><?= __('{{ field|humanize }}') ?>: <strong><?= ${{ otherSingularVar }}->{{ field }} ?></strong></p>
                                 {% endfor %}
                             </div>
                         </div>
