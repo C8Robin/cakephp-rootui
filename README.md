@@ -22,3 +22,35 @@ The recommended way to install composer packages is:
 ```
 composer require c8robin/cakephp-rootui
 ```
+
+## Configuration
+Load the plugin
+
+```
+bin\cake plugin load RootUi
+```
+
+Set RootUi as your theme. Do this in your AppController::beforeRender() method
+
+    public function beforeRender(EventInterface $event)
+    {
+        parent::beforeRender($event);
+
+        $this->viewBuilder()->setTheme('RootUi');
+    }
+
+Make sure to use the theme's templates for rendering form controls and paginator elements. Also, add your own CSS and js if needed.
+Put the following in your View::initialize() method:
+
+    public function initialize(): void
+    {
+        $this->loadHelper('Paginator', ['templates' => 'RootUi.paginator-templates']);
+        $this->loadHelper('Form', ['templates' => 'RootUi.ctform']);
+        $this->loadHelper('RootUi.Nav');
+ 
+        $this->append('css');
+        echo $this->Html->css('myapp.css');
+        $this->end();
+    }
+
+You can insert navigation links in the menu on the left by creating menu items with the Nav helper, provided by the plugin.
