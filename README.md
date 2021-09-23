@@ -40,7 +40,7 @@ Set RootUi as your theme. Do this in your AppController::beforeRender() method
     }
 
 Make sure to use the theme's templates for rendering form controls and paginator elements. Also, add your own CSS and js if needed.
-Put the following in your View::initialize() method:
+Put the following in your AppView::initialize() method:
 
     public function initialize(): void
     {
