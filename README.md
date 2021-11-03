@@ -23,7 +23,7 @@ The recommended way to install composer packages is:
 composer require c8robin/cakephp-rootui
 ```
 
-## Configuration
+## Using the RootUi plugin
 Load the plugin
 
 ```
@@ -54,3 +54,14 @@ Put the following in your AppView::initialize() method:
     }
 
 You can insert navigation links in the menu on the left by creating menu items with the Nav helper, provided by the plugin.
+
+For instance, still in AppView::initialize() :
+```
+    $this->start('nav');
+        echo $this->Nav->navLabel('Get started');
+        echo $this->Nav->navItem('Item 1', $this->Url->build(['controller' => 'Controller1', 'action' => 'index']), 'plus', $this->getRequest()->getParam('controller') == 'Controller1');
+        echo $this->Nav->navItem('Item 2', $this->Url->build(['controller' => 'Controller2', 'action' => 'dashboard']), 'box', $this->getRequest()->getParam('controller') == 'Controller2');
+    $this->end();
+```
+
+Notice how you can use a check on the current controller to make a nav item current or not.

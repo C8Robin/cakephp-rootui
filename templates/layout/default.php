@@ -325,6 +325,10 @@ if (isset($entity)) {
             window.location = this.dataset.href;
         });
 
+        $(document.body).on("click", "div[data-href]", function () {
+            window.location = this.dataset.href;
+        });
+
         $('#entities').DataTable(
             {
                 retrieve: true,
